@@ -68,8 +68,8 @@ workflows:
       - build-app
       - lint-app
       - unit-test
-      # - builddocker-image:
-      #     requires: [unit-test]
+      - builddocker-image:
+          requires: [unit-test]
       # - create-cluster:
       #     requires:
       #       - unit-test
