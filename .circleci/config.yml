@@ -58,10 +58,10 @@ jobs:
       - run:
           name: build and push docker image
           command: |
-            ls
-            cd my-app
             docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PWD
-            ./my-app/run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
+            cd my-app
+            ls
+            ./run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
 workflows:
   default:
     jobs:
