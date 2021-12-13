@@ -65,9 +65,9 @@ jobs:
 workflow:
   deployment:
     jobs:
-      - build:
-      - lint:
-      - unit-test:
+      - build
+      - lint
+      - unit-test
       - builddocker-image:
           requires:
             - unit-test
