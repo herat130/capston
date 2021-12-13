@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: capston-depl
+spec:
+  selector:
+    matchLabels:
+      app: react-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: react-app
+    spec:
+      containers:
+        - name: react-app
+          image: heratdhruv/capston
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: capston-serv
+spec:
+  type: NodePort
+  selector:
+    app: react-app
+  ports:
+    - name: my-app
+      port: 3000
+      targetPort: 3000
+      NodePort: 30000

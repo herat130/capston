@@ -1,0 +1,9 @@
+vpc
+2 AZ
+internet gateway
+
+public subnet
+private subnet
+nat gateway
+route tables
+

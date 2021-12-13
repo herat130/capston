@@ -1,0 +1,14 @@
+
+security policy
+autoscalling
+target group
+LB
+
+Eks cluster
+node group
+
+bastion host [may be with autoscalling policy]
+circle ci will install kubectl in bastion host
+
+
+arn:aws:iam::938688688932:role/herat-eks

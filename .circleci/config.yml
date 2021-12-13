@@ -1,0 +1,82 @@
+version: 2.1
+orbs:
+  docker: circleci/docker@1.4.0
+jobs:
+  build:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Build React App
+          command: |
+            cd ../my-app
+            npm i
+            npm run build
+      - save_cache:
+          paths: [my-app/node_modules]
+          key: frontend-build
+  lint:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: Lint React App
+          command: |
+            cd ../my-app
+            npm i
+            npm run lint
+      - save_cache:
+          paths: [my-app/node_modules]
+          key: frontend-build
+  unit-test:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-build]
+      - run:
+          name: unit Test
+          command: |
+            cd ../my-app
+            npm i
+            npm run test
+      - save_cache:
+          paths: [my-app/node_modules]
+          key: frontend-build
+  builddocker-image:
+    machine: true
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: build and push docker image
+          command: |
+            ls
+            cd my-app
+            docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PWD
+            ./my-app/run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
+workflow:
+  deployment:
+    jobs:
+      - build:
+      - lint:
+      - unit-test:
+      - builddocker-image:
+          requires:
+            - unit-test
+      # - create-cluster:
+      #     requires:
+      #       - unit-test
+      # - deploy-containers:
+      #     requires:
+      #       - create-cluster
+      # - smoke-test:
+      #     requires:
+      #       - deploy-containers
