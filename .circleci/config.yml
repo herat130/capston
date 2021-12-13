@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   docker: circleci/docker@1.4.0
 jobs:
-  build:
+  build-app:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -18,7 +18,7 @@ jobs:
       - save_cache:
           paths: [my-app/node_modules]
           key: frontend-build
-  lint:
+  lint-app:
     docker:
       - image: circleci/node:13.8.0
     steps:
@@ -63,13 +63,13 @@ jobs:
             docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PWD
             ./my-app/run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
 workflow:
-  deployment:
+  default:
     jobs:
-      - build
-      - lint
+      - build-app
+      - lint-app
       - unit-test
-      - builddocker-image:
-          requires: [unit-test]
+      # - builddocker-image:
+      #     requires: [unit-test]
       # - create-cluster:
       #     requires:
       #       - unit-test
