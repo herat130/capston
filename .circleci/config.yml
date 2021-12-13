@@ -12,7 +12,7 @@ jobs:
       - run:
           name: Build React App
           command: |
-            cd ../my-app
+            cd my-app
             npm i
             npm run build
       - save_cache:
@@ -28,7 +28,7 @@ jobs:
       - run:
           name: Lint React App
           command: |
-            cd ../my-app
+            cd my-app
             npm i
             npm run lint
       - save_cache:
@@ -44,7 +44,7 @@ jobs:
       - run:
           name: unit Test
           command: |
-            cd ../my-app
+            cd my-app
             npm i
             npm run test
       - save_cache:
