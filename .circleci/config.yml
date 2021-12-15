@@ -78,7 +78,7 @@ jobs:
             kubectl version
             kubectl get service
             cd kubernetes
-            chmod +x ./bluegreen.sh blue
+            chmod +x ./bluegreen.sh "blue"
 
 workflows:
   default:
