@@ -52,7 +52,7 @@ jobs:
       - save_cache:
           paths: [my-app/node_modules]
           key: frontend-build
-  builddocker-image:
+  builddocker:
     machine: true
     working_directory: ~/app
     steps:
@@ -79,24 +79,36 @@ jobs:
             kubectl get service
             cd kubernetes
             chmod +x bluegreen.sh
-            ./bluegreen.sh "blue"
+            ./bluegreen.sh "${CIRCLE_WORKFLOW_ID:0:7}"
+  smoke-test:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - run:
+          name: Install dependency
+          command: |
+            apk add --update tar gzip ansible nodejs npm curl
+      - run:
+          name: Frontend Smoke Test
+          command: |
+            export API_URL="a018f9424b18849bca2a05f132ae2565-683501434.eu-central-1.elb.amazonaws.com:3000"
+            echo "${API_URL}"
+            if curl "${API_URL}" | grep "ok"
+            then
+                return 0
+            else
+                return 1
+            fi
 
 workflows:
   default:
     jobs:
-      # - build-app
-      # - lint-app
-      # - unit-test
-      # - builddocker-image:
-      #     requires: [unit-test]
-      - deploy-bluegreen
-        # requires: [builddocker-image]
-      # - create-cluster:
-      #     requires:
-      #       - unit-test
-      # - deploy-containers:
-      #     requires:
-      #       - create-cluster
-      # - smoke-test:
-      #     requires:
-      #       - deploy-containers
+      - build-app
+      - lint-app
+      - unit-test
+      - builddocker:
+          requires: [unit-test]
+      - deploy-bluegreen:
+          requires: [builddocker]
+      - smoke-test:
+          requires: [deploy-bluegreen]
