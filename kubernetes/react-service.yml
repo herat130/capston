@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: capston-serv
+spec:
+  type: LoadBalancer
+  selector:
+    app: react-app
+    version: VERSION
+  ports:
+    - name: my-app
+      port: 3000
+      targetPort: 3000 # actual port [application running inside container: 3000]
+      nodePort: 30000 # [cluster node port] [http://localhost:30000/] [kubectl port-forward pod/capston-depl-6dbb4c6bd9-czrvh 30000:3000]
+

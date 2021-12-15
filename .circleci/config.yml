@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   docker: circleci/docker@1.4.0
+  aws-eks: circleci/aws-eks@1.1.0
 jobs:
   build-app:
     docker:
@@ -60,17 +61,30 @@ jobs:
           command: |
             docker login --username $DOCKERHUB_USER --password $DOCKERHUB_PWD
             cd my-app
-            ls
             chmod +x run_docker.sh
             ./run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
+  deploy-bluegreen:
+    executor: aws-eks/python3
+    working_directory: ~/app
+    steps:
+      - checkout
+      - run:
+          name: build and push docker image
+          command: |
+            kubectl get service
+            cd kubernetes
+            chmod +x bluegreen.sh blue
+
 workflows:
   default:
     jobs:
-      - build-app
-      - lint-app
-      - unit-test
-      - builddocker-image:
-          requires: [unit-test]
+      # - build-app
+      # - lint-app
+      # - unit-test
+      # - builddocker-image:
+      #     requires: [unit-test]
+      - deploy-bluegreen
+        # requires: [builddocker-image]
       # - create-cluster:
       #     requires:
       #       - unit-test
