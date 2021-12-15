@@ -1,3 +1,4 @@
+[![CircleCI](https://circleci.com/gh/herat130/capston.svg?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 # Project description
     - frontend app with react
     - pipeline contains below jobs
@@ -15,3 +16,7 @@
 
 # Note:
  - it does not create infra in each pipeline
+
+![Pipeline detail](https://github.com/herat130/capston/blob/master/images/Pipeline.png "Pipeline")
+ ![Blue Green Deployment](https://github.com/herat130/capston/blob/master/images/Blue-green.png "Blue Green Deployment")
+ 
