@@ -64,12 +64,7 @@ jobs:
             chmod +x run_docker.sh
             ./run_docker.sh "${CIRCLE_WORKFLOW_ID:0:7}"
   deploy-bluegreen:
-    executor: aws-eks/python3
-    parameters:
-      cluster-name:
-        description: |
-          demoCluster
-        type: string
+    executor: aws-eks/python3    
     working_directory: ~/app
     steps:
       - checkout
