@@ -73,7 +73,7 @@ jobs:
       - aws-eks/update-kubeconfig-with-authenticator:
           cluster-name: demoCluster
       - run:
-          name: build and push docker image
+          name: Blue / Green Deployment
           command: |
             kubectl version
             kubectl get service
@@ -91,9 +91,9 @@ jobs:
       - run:
           name: Frontend Smoke Test
           command: |
-            export API_URL="a018f9424b18849bca2a05f132ae2565-683501434.eu-central-1.elb.amazonaws.com:3000"
-            echo "${API_URL}"
-            if curl "${API_URL}" | grep "ok"
+            export APP_URL="http://a018f9424b18849bca2a05f132ae2565-683501434.eu-central-1.elb.amazonaws.com:3000"
+            echo "${APP_URL}"
+            if curl "${APP_URL}" | grep "html"
             then
                 return 0
             else
